@@ -1,0 +1,46 @@
+%h2 Listing students by Name
+
+%table#students
+  %tr
+    %td{:style=>"width: 150px"} <b>Student</b>
+    %th
+    %th{:style=>"width: 100px"}
+    %td <b>Classroom</b>
+
+
+    - Student.order(:student_name).each do |student|
+      %tr
+        %td= link_to "#{student.student_name}", student
+        %td= link_to 'Edit', edit_student_path(student), class: "btn"
+        %td= link_to 'Delete', student, :method => :delete, :data => { :confirm => 'Are you sure?' }
+        - student.classroom_ids.each do |classroom_ids|
+          %td= " | " + Classroom.find_by_id(classroom_ids).name
+        %td= " | "
+
+%h2 Listing students by Classroom
+- Classroom.order(:name).each do |room|
+  %h3 #{room.name}
+  %table.classes
+    %tr
+      %td{:style=>"width: 150px"} <b>Student</b>
+      %th
+      %th
+      - room.students.order(:student_name).each do |student|
+        %tr
+          %td= link_to "#{student.student_name}", student
+          %td= link_to 'Edit', edit_student_path(student)
+          %td= link_to 'Delete', student, :method => :delete, :data => { :confirm => 'Are you sure?' }
+      %tr
+-#    - else
+-#      - current_user.classrooms.each do |room|
+-#        %tr
+-#          %th{:colspan => 8}= room.name
+-#        - room.students.each do |student|
+-#          %tr
+-#            %td= student.student_name
+-#            %td= link_to "Show #{student.student_name}", student
+
+
+  
+%br
+= link_to 'Add New Student', new_student_path

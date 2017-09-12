@@ -1,0 +1,31 @@
+= form_for @classroom do |f|
+  - if @classroom.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@classroom.errors.count, "error")} prohibited this classroom from being saved:"
+      %ul
+        - @classroom.errors.full_messages.each do |msg|
+          %li= msg
+
+  .field
+    = f.label :name, "Name*"
+    = f.text_field :name
+    %br/
+    %br/
+  .field
+    = f.label :user_ids, "Teachers: "
+    - for user in User.find(:all)
+      %br/
+      = check_box_tag "classroom[user_ids][]", user.id, user == current_user
+      = user.name
+  %br/
+  .field
+    = f.label :student_ids, "Students: "
+    - for student in Student.find(:all)
+      %br/
+      = check_box_tag "classroom[student_ids][]", student.id
+      = student.student_name
+  %br/
+  * denotes a required field
+  %br/
+  .actions
+    = f.submit 'Save Classroom'

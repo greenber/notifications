@@ -1,0 +1,28 @@
+= render "shared/error_messages", :target => @user
+%p
+  = form.label :name, "Name*"
+  = form.text_field :name
+%p
+  = form.label :phone_number
+  = form.text_field :phone_number
+%p
+  = form.label :email
+  = form.text_field :email
+%p
+  = form.label :password, form.object.new_record? ? nil : "Change password"
+  = form.password_field :password
+%p
+  = form.label :password_confirmation, 'Password confirmation'
+  = form.password_field :password_confirmation
+%p
+  = form.label :admin, "Admin? "
+  = form.check_box :admin, {}, "true", "false"
+%p
+  = form.label :classroom, "Classroom: "
+  - for classroom in Classroom.find(:all)
+    %br/
+    = classroom.name
+    = check_box_tag "user[classroom_ids][]", classroom.id
+    
+* denotes a required field
+%br/

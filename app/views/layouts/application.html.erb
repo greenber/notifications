@@ -1,14 +1,82 @@
+
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Head Start</title>
-  <%= stylesheet_link_tag    "application", :media => "all" %>
-  <%= javascript_include_tag "application" %>
-  <%= csrf_meta_tags %>
-</head>
-<body>
+  <head>
+    <title>Head Start</title>
+    <%= stylesheet_link_tag 'application' %>
+    <%= javascript_include_tag 'application' %> 
+    <%= csrf_meta_tags %>
 
-<%= yield %>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+  <head>
+  <body>
 
-</body>
+    <%= render '/shared/header' %>
+
+    <nav class="nav">
+
+      <ul>
+
+        <li class="nav-link nav-li <%= 'nav-selected' if params[:controller] == 'history' %>">
+          <a href="/history" class="nav-first">History</a>
+        </li>
+
+        <% if @current_user.admin %>
+        <li class="nav-li">
+          <div class="nav-dropdown nav-first <%= 'nav-selected' if params[:controller] == 'students' || params[:controller] == 'classrooms' || params[:controller] == 'users' ||  params[:controller] == 'contacts'%>">
+            View/Edit Data  <%= image_tag "dropdownArrow.png", :class => "nav-dropdown-image" %>
+          </div>
+
+          <ul class="nav-submenu">
+            <li> <a href="/students" class="nav-link"> Students </a> </li>
+            <li> <a href="/classrooms" class="nav-link"> Classrooms </a> </li>
+            <li> <a href="/users" class="nav-link"> Users </a> </li>
+            <li> <a href="/contacts" class="nav-link"> Contacts </a> </li>
+            
+          </ul>
+        </li>
+        <% end %>
+        
+        <% if !@current_user.admin %>
+        <li class="nav-li">
+          <div class="nav-dropdown nav-first <%= 'nav-selected' if params[:controller] == 'students' || params[:controller] == 'classrooms' || params[:controller] == 'users' ||  params[:controller] == 'contacts'%>">
+            Edit Data  <%= image_tag "dropdownArrow.png", :class => "nav-dropdown-image" %>
+          </div>
+
+          <ul class="nav-submenu">
+            <li> <a href="/students" class="nav-link"> Students </a> </li>
+            <li> <a href="/contacts" class="nav-link"> Contacts </a> </li>
+            <li> <a href="/classrooms" class="nav-link"> Classrooms </a> </li>
+            
+          </ul>
+        </li>
+        <% end %>
+
+        <li class="nav-link nav-li <%= 'nav-selected' if params[:controller] == 'user_manual' %>">
+          <a href="/user_manual" class="nav-first">User Manual</a>
+        </li>
+        
+        
+        <li class="nav-li">
+          <div class="nav-dropdown nav-first">
+            <%= current_user.name %> <%= image_tag "dropdownArrow.png", :class => "nav-dropdown-image" %>
+          </div>
+
+          <ul class="nav-submenu">
+            <li><a href=<%= "/users/#{@current_user[:id]}" %> class="nav-link">Settings</a></li>
+            <li><a href="/logout" class="nav-link">Logout</a></li>
+          </ul>
+        </li>
+        
+      </ul>
+
+    </nav>
+
+    <div id="main-content">
+
+      <%= yield %>
+
+    </div>
+
+  </body>
 </html>
